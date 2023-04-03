@@ -1,0 +1,335 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+
+  "/api/v1/pets":
+    get:
+      summary: Retrieves all pets
+      tags:
+      - Pets
+      parameters: []
+      responses:
+        '200':
+          description: pets found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    photo_url:
+                      type: string
+                    status:
+                      type: string
+                  required:
+                  - id
+                  - name
+                  - status
+                  - photo_url
+    post:
+      summary: Creates a pet
+      tags:
+      - Pets
+      parameters: []
+      responses:
+        '201':
+          description: pet created
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                photo_url:
+                  type: string
+                status:
+                  type: string
+              required:
+              - name
+              - status
+              - photo_url
+    
+  "/api/v1/pets/{id}":
+    get:
+      summary: Retrieves a pet
+      tags:
+      - Pets
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: name found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  photo_url:
+                    type: string
+                  status:
+                    type: string
+                required:
+                - id
+                - name
+                - status
+                - photo_url
+        '404':
+          description: pet not found  
+    put:
+      summary: Updates a pet
+      tags:
+        - Pets
+      parameters:
+        - name: id
+          in: path
+          description: ID of the pet to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: pet updated
+        '404':
+          description: pet not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                photo_url:
+                  type: string
+                status:
+                  type: string
+              required:
+              - name
+              - status
+              - photo_url
+    delete:
+      summary: Deletes a pet by ID
+      tags:
+        - Pets
+      parameters:
+        - name: id
+          in: path
+          description: ID of the pet to delete
+          required: true
+          type: integer
+      responses:
+        204:
+          description: Pet deleted successfully
+        404:
+          description: Pet not found
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    definitions:
+      ErrorResponse:
+        type: object
+        properties:
+          error:
+            type: string
+            description: Error message
+
+
+
+
+        
+    
+    
+  "/api/v1/pets/{pet_id}/comments":
+    get:
+      summary: Retrieves all comments
+      tags:
+      - Comments
+      parameters: 
+        - name: pet_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: comments found
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    content:
+                      type: string
+                    pet_id:
+                      type: integer
+                  required:
+                  - id
+                  - content
+                  - pet_id
+    post:
+      summary: Creates a comment
+      tags:
+      - Comments
+      parameters: 
+      - name: pet_id
+        in: path
+        required: true
+        schema:
+         type: string
+      responses:
+        '201':
+          description: pet created
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+              - content
+             
+
+
+  "/api/v1/pets/{pet_id}/comments/{id}":
+    get:
+      summary: Retrieves all comments of this id
+      tags:
+      - Comments
+      parameters: 
+        - name: pet_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: comments found
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    content:
+                      type: string
+                    pet_id:
+                      type: integer
+                  required:
+                  - id
+                  - content
+                  - pet_id
+
+    put:
+      summary: Updates a comment
+      tags:
+        - Comments
+      parameters:
+        - name: pet_id
+          in: path
+          description: ID of the pet to update comment
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: ID of the comment to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: pet updated
+        '404':
+          description: pet not found
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                pet_id:
+                  type: integer              
+              required:
+              - id
+              - content
+              - pet_id
+    delete:
+      summary: Deletes a comment by ID
+      tags:
+        - Comments
+      parameters:
+        - name: pet_id
+          in: path
+          description: ID of the pet to delete comment
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: ID of the commet to delete
+          required: true
+          type: integer
+      responses:
+        204:
+          description: Comment deleted successfully
+        404:
+          description: Comment not found
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+definitions:
+  ErrorResponse:
+    type: object
+    properties:
+      error:
+        type: string
+        description: Error message
+    
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
+
