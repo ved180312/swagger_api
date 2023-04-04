@@ -154,12 +154,6 @@ paths:
             type: string
             description: Error message
 
-
-
-
-        
-    
-    
   "/api/v1/pets/{pet_id}/comments":
     get:
       summary: Retrieves all comments
@@ -222,7 +216,7 @@ paths:
 
   "/api/v1/pets/{pet_id}/comments/{id}":
     get:
-      summary: Retrieves all comments of this id
+      summary: Retrieves single comment using pet I'D and comment I'D
       tags:
       - Comments
       parameters: 
