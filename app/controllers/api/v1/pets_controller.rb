@@ -4,10 +4,23 @@ module Api
   module V1
     # PetsController
     class PetsController < ApplicationController
-      before_action :set_pet, only: %i[show update destroy]
+      before_action :set_pet, only: %i[show update destroy detail]
+
+      def popular
+        # @pets = Pet.order(name: :desc).limit(10)
+        @pets = Pet.where(name: :null).count
+        render json: @pets #{message: "ved"}
+      end
+
+      def detail
+        @pet.name = @pet.name.upcase 
+        render json: @pet
+      end
 
       def index
-        @pets = Pet.all
+        # @pets = Pet.all
+        # render json: @pets
+        @pets = Pet.all.map {|pet| pet_to_hash(pet)}
         render json: @pets
       end
 
@@ -44,6 +57,14 @@ module Api
 
       def pet_params
         params.fetch(:pet).permit(:name, :status, :photo_url)
+      end
+
+      def pet_to_hash(pet)
+        {
+          name: pet.name,
+          status: pet.status,
+          photo_url: "https://example.com#{pet.photo_url}"
+        }
       end
     end
   end
