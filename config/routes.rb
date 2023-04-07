@@ -6,6 +6,12 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :pets do
+        collection do
+          get :popular
+        end
+        member do
+          get :detail 
+        end
         resources :comments
       end
     end
